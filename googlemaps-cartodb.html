@@ -1,0 +1,32 @@
+---
+layout: default
+---
+
+<h1>Google Maps &amp; CartoDB</h1>
+
+<p><a href="http://code.google.com/apis/maps/">Google Maps</a> with <a href="http://cartodb.com/">CartoDB</a> using <a href="https://github.com/Vizzuality/cartodb-gmapsv3">cartodb-gmapsv3</a>.</p>
+
+<div id="map"></div>
+
+<script type="text/javascript">
+        var myOptions = {
+          center: new google.maps.LatLng(41.118923,-73.795842),
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map"),
+            myOptions);
+
+var cartodb_gmapsv3 = new google.maps.CartoDBLayer({
+  map_canvas: 'map',
+  map: map,
+  user_name:"spilth",
+  table_name: 'trails',
+  query: "SELECT * FROM trails",
+  map_style: false,
+  auto_bound: true,
+  debug: false
+});
+
+    </script>
+

@@ -1,0 +1,57 @@
+---
+layout: default
+---
+<h1>Leaflet &amp; CartoDB</h1>
+
+<a href="http://leaflet.cloudmade.com/">Leaflet</a> with <a href="http://cartodb.com/">CartoDB</a> using <a href="http://geojson.org/">GeoJSON</a>.</p>
+
+<div id="map"></div>
+
+<script>
+    var map = new L.Map('map', {});
+    // crs: L.CRS.EPSG4326
+    var graham = new L.LatLng(41.118923,-73.795842);
+    var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
+    cloudmadeAttrib = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
+    cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18, attribution: cloudmadeAttrib});
+        map.addLayer(cloudmade);
+    map.setView(graham, 15);
+    
+    var bldgLayer = new L.GeoJSON();
+
+    bldgLayer.on("featureparse", function (e) {
+      if (e.properties && e.properties.color && e.layer.setStyle){
+        var color = "#ccc";
+        var t = e.properties.color;
+        var colormap = {
+          "red":"#f00",
+          "green":"#090",
+          "blue":"#009",
+          "white":"#fff",
+          "orange":"#fa0",
+          "yellow":"#ff0",
+          "white,blue":"#ccf",
+          "emergency":"#a99",
+          "pink":"#faa"
+        };
+  
+        color = colormap[t] || color;
+
+        e.layer.setStyle({"color":color,"weight": 3,"opacity": 1.0 });
+
+      } else { //default
+        e.layer.setStyle({"color":"#fcc","weight": 3,"opacity": 1.0 });
+      }
+    }); //end featu
+
+    $.getJSON("http://spilth.cartodb.com/api/v1/sql?q=SELECT%20*%20FROM%20trails&format=geojson&callback=?",
+	    function(geojson) {
+		    $.each(geojson.features, function(i, feature) {
+			    bldgLayer.addGeoJSON(feature);
+		  })
+	  });
+  
+    map.addLayer(bldgLayer);
+
+  </script>
+

@@ -1,0 +1,19 @@
+---
+layout: default
+---
+
+<div id='map'></div>
+<script type="text/javascript">
+
+var options = {
+};
+
+var map = new OpenLayers.Map('map', options);
+var wms = new OpenLayers.Layer.WMS(
+  "OpenLayers WMS",
+  "http://vmap0.tiles.osgeo.org/wms/vmap0",
+  {'layers':'basic'} );
+map.addLayer(wms);
+map.panTo(OpenLayers.LonLat(41.118923,-73.795842));
+</script>
+

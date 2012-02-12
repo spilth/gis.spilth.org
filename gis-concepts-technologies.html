@@ -1,0 +1,45 @@
+---
+layout: default
+title: GIS Concepts & Technologies
+---
+<p>Outline of GIS concepts and technologies pulled from <a href="https://trello.com/board/gis/4f2e08f41c2c1d96286e0856">my Trello GIS Board</a> using <a href="http://jquery.com/">JQuery</a>.</p>
+
+<div id="output"></div>
+
+<script>
+  $.getJSON('/trello.json', function(data) {
+  var lists = [];
+  var cards = [];
+
+  $.each(data.lists, function(key, val) {
+    $('<h2>', {
+      id: val.id,
+      html: val.name
+    }).appendTo('#output');
+
+  });
+
+  $.each(data.cards.reverse(), function(key, val) {
+    if (val.name.indexOf("http", 0) == 0) {
+      headerHtml = $('<a>', {
+        href: val.name,
+        html: val.name
+      });
+    } else{
+      headerHtml = val.name;
+    }
+
+    $('<h3>', {
+      id: val.id,
+      html: headerHtml 
+    }).insertAfter('#' + val.idList);
+    
+    $('<p>', {
+      html: val.desc
+    }).insertAfter('#' + val.id);
+  
+  });
+
+});
+</script>
+
